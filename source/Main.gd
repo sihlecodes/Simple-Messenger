@@ -5,7 +5,7 @@ func _on_send_pressed() -> void:
 	%message_edit.grab_focus()
 
 func _on_message_edit_text_submitted(message: String) -> void:
-	$Networking.serve_message.rpc_id(1, message)
+	$Networking.serve_message(message)
 	%message_edit.clear()
 
 func _on_messages_focus_entered() -> void:
