@@ -18,8 +18,9 @@ extends MarginContainer
 @export var spacing: int :
 	set(value):
 		spacing = value
-		if $vbox:
-			$vbox.add_theme_constant_override(\"separation\", value)
+
+		await ready
+		%vbox.add_theme_constant_override(\"separation\", value)
 "
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ur87j"]
@@ -49,6 +50,7 @@ margin = 10
 spacing = 10
 
 [node name="vbox" type="VBoxContainer" parent="main_layout"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
