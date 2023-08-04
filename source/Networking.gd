@@ -46,10 +46,11 @@ func recieve_message(sender_id: int, sender_name: String, message: String):
 	var unique_id: = multiplayer.get_unique_id()
 
 	if sender_id == unique_id:
-		sender_name = "You"
+		sender_name = "[color=tomato]You[/color]"
+	else:
+		sender_name = "[color=cornflowerblue]%s[/color]" % sender_name
 
 	message = "%s: %s" % [sender_name, message]
-
 	%messages.text += ("\n" + message) if %messages.text else message
 
 @rpc("call_local")
