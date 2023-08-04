@@ -1,6 +1,7 @@
 extends Node
 
 const PORT: = 9823
+var users: = {1: "Server"}
 
 func _ready() -> void:
 	multiplayer.connection_failed.connect(_on_connected_fail)
@@ -34,13 +35,26 @@ func join_session(peer: ENetMultiplayerPeer):
 	peer.create_client("localhost", PORT)
 
 @rpc("any_peer", "call_local")
-func send(message: String):
+func serve_message(message: String):
+	var id: = multiplayer.get_remote_sender_id()
+	var username: String = users[id]
+
+	recieve_message.rpc(id, username, message)
+
+@rpc("any_peer", "call_local")
+func recieve_message(sender_id: int, sender_name: String, message: String):
+	var unique_id: = multiplayer.get_unique_id()
+
+	if sender_id == unique_id:
+		sender_name = "You"
+
+	message = "%s: %s" % [sender_name, message]
+
 	%messages.text += ("\n" + message) if %messages.text else message
-	print("sending: ", message, " @ ", multiplayer.get_unique_id(), " from ", multiplayer.get_remote_sender_id())
 
 @rpc("call_local")
 func add_user(id: int):
-	print("server logged: ", id)
+	users[id] = "User%d" % randi_range(1000, 10000)
 
 func _on_user_connected(id: int):
 	if is_multiplayer_authority():

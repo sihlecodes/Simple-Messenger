@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cfxdjah6ghdpr"]
+[gd_scene load_steps=7 format=3 uid="uid://cfxdjah6ghdpr"]
 
 [ext_resource type="Script" path="res://source/Main.gd" id="1_vf61o"]
 [ext_resource type="Script" path="res://source/Networking.gd" id="2_foj38"]
@@ -29,6 +29,21 @@ bg_color = Color(0.145098, 0.145098, 0.145098, 1)
 [sub_resource type="Theme" id="Theme_n3mrb"]
 RichTextLabel/styles/normal = SubResource("StyleBoxFlat_ur87j")
 
+[sub_resource type="GDScript" id="GDScript_hid62"]
+script/source = "@tool
+extends RichTextLabel
+
+@export var margin: int :
+	set(value):
+		margin = value
+		var stylebox: = theme.get_stylebox(\"normal\", \"RichTextLabel\")
+
+		stylebox.content_margin_left = margin
+		stylebox.content_margin_right = margin
+		stylebox.content_margin_top = margin
+		stylebox.content_margin_bottom = margin
+"
+
 [node name="Main" type="Node"]
 script = ExtResource("1_vf61o")
 
@@ -54,25 +69,26 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="scroll_container" type="ScrollContainer" parent="main_layout/vbox"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="messages" type="RichTextLabel" parent="main_layout/vbox/scroll_container"]
+[node name="messages" type="RichTextLabel" parent="main_layout/vbox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+focus_mode = 2
 theme = SubResource("Theme_n3mrb")
+theme_override_constants/line_separation = 5
 bbcode_enabled = true
+autowrap_mode = 1
 selection_enabled = true
+script = SubResource("GDScript_hid62")
+margin = 10
 
 [node name="buttons" type="HBoxContainer" parent="main_layout/vbox"]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 8
 
-[node name="text_edit" type="LineEdit" parent="main_layout/vbox/buttons"]
+[node name="message_edit" type="LineEdit" parent="main_layout/vbox/buttons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -83,6 +99,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Send"
 
-[connection signal="focus_entered" from="main_layout/vbox/scroll_container/messages" to="." method="_on_messages_focus_entered"]
-[connection signal="text_submitted" from="main_layout/vbox/buttons/text_edit" to="." method="_on_text_edit_text_submitted"]
+[connection signal="focus_entered" from="main_layout/vbox/messages" to="." method="_on_messages_focus_entered"]
+[connection signal="text_submitted" from="main_layout/vbox/buttons/message_edit" to="." method="_on_message_edit_text_submitted"]
 [connection signal="pressed" from="main_layout/vbox/buttons/send" to="." method="_on_send_pressed"]
