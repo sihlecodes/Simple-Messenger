@@ -1,0 +1,86 @@
+[gd_scene load_steps=6 format=3 uid="uid://cfxdjah6ghdpr"]
+
+[ext_resource type="Script" path="res://source/Main.gd" id="1_vf61o"]
+[ext_resource type="Script" path="res://source/Networking.gd" id="2_foj38"]
+
+[sub_resource type="GDScript" id="GDScript_ub5no"]
+script/source = "@tool
+extends MarginContainer
+
+@export var margin: int :
+	set(value):
+		margin = value
+		add_theme_constant_override(\"margin_top\", value)
+		add_theme_constant_override(\"margin_left\", value)
+		add_theme_constant_override(\"margin_bottom\", value)
+		add_theme_constant_override(\"margin_right\", value)
+
+@export var spacing: int :
+	set(value):
+		spacing = value
+		if $vbox:
+			$vbox.add_theme_constant_override(\"separation\", value)
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ur87j"]
+bg_color = Color(0.145098, 0.145098, 0.145098, 1)
+
+[sub_resource type="Theme" id="Theme_n3mrb"]
+RichTextLabel/styles/normal = SubResource("StyleBoxFlat_ur87j")
+
+[node name="Main" type="Node"]
+script = ExtResource("1_vf61o")
+
+[node name="Networking" type="Node" parent="."]
+script = ExtResource("2_foj38")
+
+[node name="main_layout" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = SubResource("GDScript_ub5no")
+margin = 10
+spacing = 10
+
+[node name="vbox" type="VBoxContainer" parent="main_layout"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="scroll_container" type="ScrollContainer" parent="main_layout/vbox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="messages" type="RichTextLabel" parent="main_layout/vbox/scroll_container"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_n3mrb")
+bbcode_enabled = true
+selection_enabled = true
+
+[node name="buttons" type="HBoxContainer" parent="main_layout/vbox"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+
+[node name="text_edit" type="LineEdit" parent="main_layout/vbox/buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 6.5
+
+[node name="send" type="Button" parent="main_layout/vbox/buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Send"
+
+[connection signal="focus_entered" from="main_layout/vbox/scroll_container/messages" to="." method="_on_messages_focus_entered"]
+[connection signal="text_submitted" from="main_layout/vbox/buttons/text_edit" to="." method="_on_text_edit_text_submitted"]
+[connection signal="pressed" from="main_layout/vbox/buttons/send" to="." method="_on_send_pressed"]
