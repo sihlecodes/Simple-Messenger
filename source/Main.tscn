@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://cfxdjah6ghdpr"]
+[gd_scene load_steps=8 format=3 uid="uid://cfxdjah6ghdpr"]
 
 [ext_resource type="Script" path="res://source/Main.gd" id="1_vf61o"]
 [ext_resource type="Script" path="res://source/Networking.gd" id="2_foj38"]
+[ext_resource type="Script" path="res://source/username_prompt.gd" id="3_26uaj"]
 
 [sub_resource type="GDScript" id="GDScript_ub5no"]
 script/source = "@tool
@@ -24,6 +25,10 @@ extends MarginContainer
 "
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ur87j"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
 bg_color = Color(0.145098, 0.145098, 0.145098, 1)
 
 [sub_resource type="Theme" id="Theme_n3mrb"]
@@ -99,6 +104,49 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Send"
 
+[node name="username_prompt" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -92.0
+offset_top = -56.0
+offset_right = 99.0
+offset_bottom = 65.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_26uaj")
+
+[node name="margins" type="MarginContainer" parent="username_prompt"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 188.0
+offset_bottom = 116.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="layout" type="VBoxContainer" parent="username_prompt/margins"]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="hint" type="Label" parent="username_prompt/margins/layout"]
+layout_mode = 2
+text = "Enter your username"
+
+[node name="username" type="LineEdit" parent="username_prompt/margins/layout"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="confirm" type="Button" parent="username_prompt/margins/layout"]
+layout_mode = 2
+text = "Confirm"
+
 [connection signal="focus_entered" from="main_layout/vbox/messages" to="." method="_on_messages_focus_entered"]
 [connection signal="text_submitted" from="main_layout/vbox/buttons/message_edit" to="." method="_on_message_edit_text_submitted"]
 [connection signal="pressed" from="main_layout/vbox/buttons/send" to="." method="_on_send_pressed"]
+[connection signal="submit" from="username_prompt" to="." method="_on_username_prompt_submit"]
+[connection signal="text_submitted" from="username_prompt/margins/layout/username" to="username_prompt" method="_on_username_text_submitted"]
+[connection signal="pressed" from="username_prompt/margins/layout/confirm" to="username_prompt" method="_on_confirm_pressed"]

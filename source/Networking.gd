@@ -1,13 +1,13 @@
 extends Node
 
 const PORT: = 9823
-var users: = {1: "Server"}
+
+var users: Dictionary = {1: "Server"}
+var username: String
 
 func _ready() -> void:
 	multiplayer.connection_failed.connect(_on_connected_fail)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
-
-	create_or_join()
 
 func create_or_join():
 	var peer: = ENetMultiplayerPeer.new()
