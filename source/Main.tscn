@@ -79,7 +79,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-focus_mode = 2
 theme = SubResource("Theme_n3mrb")
 theme_override_constants/line_separation = 5
 bbcode_enabled = true
@@ -98,6 +97,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 6.5
+focus_mode = 0
 
 [node name="send" type="Button" parent="main_layout/vbox/buttons"]
 layout_mode = 2
@@ -129,19 +129,19 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="layout" type="VBoxContainer" parent="username_prompt/margins"]
+[node name="vbox" type="VBoxContainer" parent="username_prompt/margins"]
 layout_mode = 2
 theme_override_constants/separation = 7
 
-[node name="hint" type="Label" parent="username_prompt/margins/layout"]
+[node name="hint" type="Label" parent="username_prompt/margins/vbox"]
 layout_mode = 2
 text = "Enter your username"
 
-[node name="username" type="LineEdit" parent="username_prompt/margins/layout"]
+[node name="username" type="LineEdit" parent="username_prompt/margins/vbox"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="confirm" type="Button" parent="username_prompt/margins/layout"]
+[node name="confirm" type="Button" parent="username_prompt/margins/vbox"]
 layout_mode = 2
 text = "Confirm"
 
@@ -149,5 +149,5 @@ text = "Confirm"
 [connection signal="text_submitted" from="main_layout/vbox/buttons/message_edit" to="." method="_on_message_edit_text_submitted"]
 [connection signal="pressed" from="main_layout/vbox/buttons/send" to="." method="_on_send_pressed"]
 [connection signal="submit" from="username_prompt" to="." method="_on_username_prompt_submit"]
-[connection signal="text_submitted" from="username_prompt/margins/layout/username" to="username_prompt" method="_on_username_text_submitted"]
-[connection signal="pressed" from="username_prompt/margins/layout/confirm" to="username_prompt" method="_on_confirm_pressed"]
+[connection signal="text_submitted" from="username_prompt/margins/vbox/username" to="username_prompt" method="_on_username_text_submitted"]
+[connection signal="pressed" from="username_prompt/margins/vbox/confirm" to="username_prompt" method="_on_confirm_pressed"]
