@@ -5,9 +5,9 @@ const PORT: = 9823
 var users: Dictionary = {1: "Server"}
 var username: String
 
-func _ready() -> void:
-	multiplayer.connection_failed.connect(_on_connected_fail)
-	multiplayer.server_disconnected.connect(_on_server_disconnected)
+func smart_connect(signal_: Signal, callback: Callable):
+	if not signal_.is_connected(callback):
+		signal_.connect(callback)
 
 func create_or_join():
 	var peer: = ENetMultiplayerPeer.new()
@@ -18,13 +18,13 @@ func create_or_join():
 	multiplayer.set_multiplayer_peer(peer)
 
 	if not multiplayer.is_server():
+		smart_connect(multiplayer.connected_to_server, _on_connected_to_server)
+		smart_connect(multiplayer.connection_failed, _on_connected_fail)
+		smart_connect(multiplayer.server_disconnected, _on_server_disconnected)
 		return
 
-	if not multiplayer.peer_connected.is_connected(_on_user_connected):
-		multiplayer.peer_connected.connect(_on_user_connected)
 
-	if not multiplayer.peer_disconnected.is_connected(_on_user_disconnected):
-		multiplayer.peer_disconnected.connect(_on_user_disconnected)
+	smart_connect(multiplayer.peer_disconnected, _on_user_disconnected)
 
 func create_session(peer: ENetMultiplayerPeer):
 	var error: = peer.create_server(PORT)
