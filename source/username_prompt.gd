@@ -4,7 +4,6 @@ signal submit(username: String)
 
 func _ready() -> void:
 	%username.grab_focus()
-	%username.text_submitted.connect(func(username): submit.emit(username))
 
 func _on_confirm_pressed() -> void:
 	%username.text_submitted.emit(%username.text)

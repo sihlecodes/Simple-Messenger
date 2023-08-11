@@ -2,7 +2,7 @@ extends Node
 
 const PORT: = 9823
 
-var users: Dictionary = {1: "Server"}
+var users: Dictionary = {}
 var username: String
 
 func smart_connect(signal_: Signal, callback: Callable):
@@ -23,6 +23,7 @@ func create_or_join():
 		smart_connect(multiplayer.server_disconnected, _on_server_disconnected)
 		return
 
+	add_user(1, username)
 
 	smart_connect(multiplayer.peer_disconnected, _on_user_disconnected)
 
@@ -60,20 +61,21 @@ func recieve_message(sender_id: int, sender_name: String, message: String):
 	message = "%s: %s" % [sender_name, message]
 	%messages.text += ("\n" + message) if %messages.text else message
 
-func add_user(id: int):
-	users[id] = "User%d" % randi_range(1000, 10000)
+@rpc("any_peer")
+func add_user(id: int, username: String):
+	users[id] = username
 
 func remove_user(id: int):
 	users.erase(id)
 
-func _on_user_connected(id: int):
-	add_user(id)
-
 func _on_user_disconnected(id: int):
 	remove_user(id)
 
+func _on_connected_to_server():
+	add_user.rpc_id(1, multiplayer.get_unique_id(), username)
+
 func _on_connected_fail():
-	print("Connection failed...")
+	print("Failed to connect to server...")
 
 func _on_server_disconnected():
 	create_or_join()

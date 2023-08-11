@@ -119,6 +119,7 @@ grow_vertical = 2
 script = ExtResource("3_26uaj")
 
 [node name="margins" type="MarginContainer" parent="username_prompt"]
+layout_mode = 0
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 188.0
